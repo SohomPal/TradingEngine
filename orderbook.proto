@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package orderbook;
+
+// Empty message for requests that don't need parameters
+message Empty {}
+
+// Request message for getting orderbook data
+message OrderBookRequest {
+    string symbol = 1;
+}
+
+// Individual order in the orderbook
+message Order {
+    double price = 1;
+    double volume = 2;
+}
+
+// Response message containing orderbook data
+message OrderBookResponse {
+    string symbol = 1;
+    repeated Order bids = 2;
+    repeated Order asks = 3;
+    double best_bid = 4;
+    double best_ask = 5;
+    int64 timestamp = 6;
+}
+
+// Response message for available symbols
+message SymbolsResponse {
+    repeated string symbols = 1;
+}
+
+// OrderBook service definition
+service OrderBookService {
+    // Get orderbook data for a specific symbol
+    rpc GetOrderBook(OrderBookRequest) returns (OrderBookResponse);
+    
+    // Get list of available symbols
+    rpc GetAvailableSymbols(Empty) returns (SymbolsResponse);
+}
